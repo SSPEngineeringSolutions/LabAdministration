@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+/* footer {
+   margin-top: auto;
+} */
+.container{
+    padding-top: 70px;
+}
