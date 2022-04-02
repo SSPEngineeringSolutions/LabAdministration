@@ -12,50 +12,64 @@
                     <div class="formgrid grid">
                         <div class="field col">
                             <p-chip [label]="billNumber" styleClass="mr-2 custom-chip"></p-chip>
-                            <!-- <label for="firstname2">Bill Number</label>
-                            <input id="disabled-input" type="text" pInputText [disabled]="disabled" [(ngModel)]="billNumber" /> -->
                         </div>
                     </div>
                     <div class="formgrid grid pt-3">
                         <div class="field col">
                             <span class="p-float-label">
+                                <p-dropdown [options]="salutationArray" formControlName="salutation" optionLabel="sal" [autoDisplayFirst]="false"></p-dropdown>
+                                <!-- <input id="float-input" type="text" pInputText formControlName="firstName">  -->
+                                <label for="float-input">Salutation</label>
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
                                 <input id="float-input" type="text" pInputText formControlName="firstName"> 
                                 <label for="float-input">First Name</label>
                             </span>
-                            <!-- <label for="firstname2">Firstname</label>
-                            <input id="firstname2" type="text" formControlName="firstName" class="inputfield w-full"> -->
                         </div>
                         <div class="field col">
                             <span class="p-float-label">
                                 <input id="float-input" type="text" pInputText formControlName="lastName"> 
                                 <label for="float-input">Last Name</label>
                             </span>
-                            <!-- <label for="lastname2">Lastname</label>
-                            <input id="lastname2" type="text" formControlName="lastName" class="inputfield w-full"> -->
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="genderArray" formControlName="gender" optionLabel="value" [autoDisplayFirst]="false"></p-dropdown>
+                                <!-- <input id="float-input" type="text" pInputText formControlName="firstName">  -->
+                                <label for="float-input">Gender</label>
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <input id="float-input" type="number" pInputText formControlName="age"> 
+                                <label for="float-input">Age</label>
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <p-inputMask  formControlName="phoneNumber" mask="99999-99999"></p-inputMask>
+                                <label for="float-input">Phone Number</label>
+                            </span>
                         </div>
                         <div class="field col">
                             <span class="p-float-label">
                                 <input id="float-input" type="text" pInputText formControlName="test"> 
                                 <label for="float-input">Test</label>
                             </span>
-                            <!-- <label for="test">Test</label>
-                            <input id="test" type="text" formControlName="test" class="inputfield w-full"> -->
                         </div>
                         <div class="field col">
                             <span class="p-float-label">
                                 <input id="float-input" type="number" pInputText formControlName="total" (change)="calculateBalance()" (keyup)="calculateBalance()"> 
                                 <label for="float-input">Total</label>
                             </span>
-                            <!-- <label for="lastname2">Total</label>
-                            <input id="lastname2" type="number" formControlName="total" class="inputfield w-full"> -->
                         </div>
                         <div class="field col">
                             <span class="p-float-label">
                                 <input id="float-input" type="number" pInputText formControlName="paid" (change)="calculateBalance()"  (keyup)="calculateBalance()"> 
                                 <label for="float-input">Paid</label>
                             </span>
-                            <!-- <label for="lastname2">Paid</label>
-                            <input id="lastname2" type="number" formControlName="paid" class="inputfield w-full"> -->
                         </div>
 
                     </div>
@@ -63,23 +77,100 @@
                         <div class="field col">
                             <p-chip label="Balance" styleClass="mr-2 custom-chip"></p-chip>
                             <p-chip [label]="balance" styleClass="mr-2 custom-chip"></p-chip>
-                            <!-- <label for="firstname2">Bill Number</label>
-                            <input id="disabled-input" type="text" pInputText [disabled]="disabled" [(ngModel)]="billNumber" /> -->
                         </div>
                     </div>
                 </form>
             </div>
-            <!-- <form [formGroup]="newBill">
-
-      
-        <span class="p-float-label">
-            <input id="float-input" type="text" formControlName="billNumber" pInputText > 
-            <label for="float-input">Username</label>
-        </span>
-      </form> -->
             <ng-template pTemplate="footer">
                 <p-button icon="pi pi-check" (click)="newBillDialog=false;save()" label="Yes" class="p-button-text"></p-button>
                 <p-button icon="pi pi-times" (click)="newBillDialog=false" label="No"></p-button>
+            </ng-template>
+        </p-dialog>
+        <p-dialog header="Update Bill" [(visible)]="updateBillDialog" [modal]="true" [style]="{width: '80vw'}"
+            [maximizable]="true" [baseZIndex]="10000" [draggable]="true" [resizable]="true" (onHide)="resetMyBill()">
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <input type="text" pInputText placeholder="Bill Number" [(ngModel)]="updateBillNumber">   
+                    <button type="button" pButton pRipple icon="pi pi-search" styleClass="p-button-warn" (click)="getBill()"></button>      
+                </div>
+            </div>
+            <div class="card" *ngIf="displayMyBill">
+                <div class="formgrid grid pt-3">
+                    <div class="field col ">
+                        <!-- <p-chip [label]="myBill.balance.$numberInt == '0' ?  'Pending' : 'Paid'"  styleClass="mr-2 custom-chip"></p-chip> -->
+                        <p-tag styleClass="mr-2" *ngIf="myBill?.balance.$numberInt == '0'" severity="success" [value]="myBill?.balance.$numberInt == '0' ? 'Paid' : 'Pending'"></p-tag>
+                        <p-tag severity="danger" *ngIf="myBill?.balance.$numberInt != '0'"  [value]="myBill?.balance.$numberInt == '0' ? 'Paid': 'Pending'"></p-tag>
+                    </div>
+                </div>
+                    <!-- <div class="formgrid grid">
+                        <div class="field col">
+                            <p-chip [label]="billNumber" styleClass="mr-2 custom-chip"></p-chip>
+                        </div>
+                    </div> -->
+                    <div class="formgrid grid pt-3">
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="text" pInputText formControlName="firstName">  -->
+                                <label for="float-input">First Name : {{myBill?.firstName}}</label>
+                                <!-- <label for="float-input">{{myBill.firstName}}</label> -->
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="text" pInputText formControlName="lastName">  -->
+                                <label for="float-input">Last Name : {{myBill?.lastName}}</label>
+                                <!-- <label for="float-input">{{myBill.lastName}}</label> -->
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="text" pInputText formControlName="test">  -->
+                                <label for="float-input">Test : {{myBill?.test}}</label>
+                                <!-- <label for="float-input">{{myBill.test}}</label> -->
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="number" pInputText formControlName="total" (change)="calculateBalance()" (keyup)="calculateBalance()">  -->
+                                <label for="float-input">Total : {{myBill?.total }}</label>
+                                <!-- <label for="float-input">{{myBill.total.$numberInt}}</label> -->
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="number" pInputText formControlName="paid" (change)="calculateBalance()"  (keyup)="calculateBalance()">  -->
+                                <label for="float-input">Paid : {{myBill?.paid.$numberInt}}</label>
+                                <!-- <label for="float-input">{{myBill.paid.$numberInt}}</label> -->
+                            </span>
+                        </div>
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <!-- <input id="float-input" type="number" pInputText formControlName="paid" (change)="calculateBalance()"  (keyup)="calculateBalance()">  -->
+                                <label for="float-input">Balance : {{myBill?.balance.$numberInt}}</label>
+                                <!-- <label for="float-input">{{myBill.balance.$numberInt}}</label> -->
+                            </span>
+                        </div>
+                    </div>
+                    <div class="formgrid grid pt-5">
+                        <!-- <div class="col-12 md:col-4">
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText placeholder="Bill Number" [(ngModel)]="updateBillNumber">   
+                                <button type="button" pButton pRipple icon="pi pi-search" styleClass="p-button-warn" (click)="getBill()"></button>      
+                            </div>
+                        </div> -->
+                        <div class="field col">
+                            <span class="p-float-label">
+                                <input id="float-input" type="number" pInputText [(ngModel)]="updateAmount" > 
+                                <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn" (click)="updateFormCalculateBalance()"></button>
+                                <label for="float-input">Amount</label>
+                            </span>
+                        </div>
+                    </div>
+             
+            </div>
+            <ng-template pTemplate="footer">
+                <p-button icon="pi pi-check" (click)="updateSave()" label="Yes" class="p-button-text"></p-button>
+                <p-button icon="pi pi-times" (click)="resetMyBill()" label="No"></p-button>
             </ng-template>
         </p-dialog>
     </div>
