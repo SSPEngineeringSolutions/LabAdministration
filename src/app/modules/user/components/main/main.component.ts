@@ -162,6 +162,7 @@ export class MainComponent implements OnInit {
     this.commonservice.updateBill(data).subscribe(res=>{
       if (res) {
         this.myBill.paid = this.updateAmount
+        this.myBill.date = this.commonservice.calculateDate(new Date())
         this.commonservice.addDailyTotal(this.myBill).subscribe((res2) => {
           if (res2) {
             this.resetMyBill()
