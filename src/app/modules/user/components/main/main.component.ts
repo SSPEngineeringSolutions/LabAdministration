@@ -82,7 +82,7 @@ export class MainComponent implements OnInit {
       this.billNumber =
         res.billNumber.$numberInt +
         ':' +
-        temp.getMonth() +
+        (temp.getMonth()+1) +
         '/' +
         temp.getFullYear();
       this.newBill.patchValue({
